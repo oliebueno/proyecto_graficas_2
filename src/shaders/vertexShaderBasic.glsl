@@ -1,3 +1,4 @@
+// vertexShaderBasic.glsl
 precision mediump float;
 
 // Uniforms
@@ -5,6 +6,9 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform float u_time;
+uniform float u_frequency;
+uniform float u_amplitude;
+uniform float u_speed;
 
 // Attributes
 in vec3 position;
@@ -19,15 +23,11 @@ vec4 clipSpaceTransform(vec4 ModelPosition) {
 
 void main() {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-    // Gelatin movement
-    float frequency = 2.0;
-    float amplitude = 0.2;
-    float speed = 2.0;
     
-
-    modelPosition.y += sin(u_time * speed + position.x * frequency) * amplitude;
-    modelPosition.x += cos(u_time * speed + position.y * frequency) * amplitude;
-    modelPosition.z += sin(u_time * speed + position.z * frequency) * amplitude;
+    // Gelatin movement
+    modelPosition.y += sin(u_time * u_speed + position.x * u_frequency) * u_amplitude;
+    modelPosition.x += cos(u_time * u_speed + position.y * u_frequency) * u_amplitude;
+    modelPosition.z += sin(u_time * u_speed + position.z * u_frequency) * u_amplitude;
 
     gl_Position = clipSpaceTransform(modelPosition);
     v_uv = uv;

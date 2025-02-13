@@ -1,19 +1,17 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GUI } from 'dat.gui';
 
 import vertexShaderBasic from './shaders/vertexShaderBasic.glsl';
 import fragmentShaderBasic from './shaders/fragmentShaderBasic.glsl';
-
 
 class App {
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private controls: OrbitControls;
-  private material: THREE.ShaderMaterial;
+  private material: THREE.RawShaderMaterial;
   private mesh: THREE.Mesh;
-  private time: number = 0;
 
   private cameraConfig = {
     fov: 75,
@@ -21,6 +19,17 @@ class App {
     near: 0.1,
     far: 1000
   }
+
+  // Uniforms
+  private uniforms: any = {
+    projectionMatrix: { value: new THREE.Matrix4() },
+    viewMatrix: { value: new THREE.Matrix4() },
+    modelMatrix: { value: new THREE.Matrix4() },
+    u_time: { value: 0.0 },
+    u_frequency: { value: 3.5 },
+    u_amplitude: { value: 0.1 },
+    u_speed: { value: 3.0 }
+  };
 
   constructor() {
     // Create scene
@@ -51,31 +60,28 @@ class App {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     // Create material
-    this.material = new THREE.RawShaderMaterial ({
+    this.material = new THREE.RawShaderMaterial({
       vertexShader: vertexShaderBasic,
       fragmentShader: fragmentShaderBasic,
-      uniforms: {
-        projectionMatrix: { value: this.camera.projectionMatrix },
-        viewMatrix: { value: this.camera.matrixWorldInverse },
-        modelMatrix: { value: new THREE.Matrix4() },
-        time: { value: this.time }
-      },
+      uniforms: this.uniforms,
       glslVersion: THREE.GLSL3
     });
 
     // Create geometry and mesh
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const geometry = new THREE.SphereGeometry(1,128, 128);
     this.mesh = new THREE.Mesh(geometry, this.material);
     this.scene.add(this.mesh);
 
-    // Add resize event
+    // Add event listeners
     window.addEventListener('resize', this.resize.bind(this));
 
     // Add GUI
     const gui = new GUI();
-    gui.add(this.material.uniforms.time, 'value', 0, 100).name('Time');
+    gui.add(this.uniforms.u_frequency, 'value', 0, 10).name('Frequency');
+    gui.add(this.uniforms.u_amplitude, 'value', 0, 1).name('Amplitude');
+    gui.add(this.uniforms.u_speed, 'value', 0, 10).name('Speed');
 
-    // Start animation
+    // Animate function
     this.animate();
   }
 
@@ -86,13 +92,15 @@ class App {
   }
 
   private animate() {
-    this.time += 0.01;
-    this.material.uniforms.time.value = this.time;
-    this.mesh.rotation.y = this.time;
+    this.uniforms.u_time.value += 0.01;
+    this.material.uniforms.projectionMatrix.value = this.camera.projectionMatrix;
+    this.material.uniforms.viewMatrix.value = this.camera.matrixWorldInverse;
+    this.material.uniforms.modelMatrix.value = this.mesh.matrixWorld;
+
+    this.mesh.rotation.y = this.uniforms.u_time.value;
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.animate.bind(this));
   }
-
 }
 
 new App();
