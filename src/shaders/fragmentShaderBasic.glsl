@@ -1,5 +1,3 @@
-// fragmentShaderBasic.glsl
-
 precision mediump float;
 
 uniform vec3 u_color;

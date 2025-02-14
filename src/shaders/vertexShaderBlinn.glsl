@@ -4,16 +4,18 @@ precision mediump float;
 uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
+uniform vec3 u_lightPosition;
 uniform float u_time;
-uniform float u_frequency;
-uniform float u_amplitude;
-uniform float u_speed;
 
 // Attributes
 in vec3 position;
+in vec3 normal;
 in vec2 uv;
 
 // Varyings
+out vec3 v_normal;
+out vec3 v_viewPosition;
+out vec3 v_lightDirection;
 out vec2 v_uv;
 
 vec4 clipSpaceTransform(vec4 ModelPosition) {
@@ -22,12 +24,11 @@ vec4 clipSpaceTransform(vec4 ModelPosition) {
 
 void main() {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-    
-    // Gelatin movement
-    modelPosition.y += sin(u_time * u_speed + position.x * u_frequency) * u_amplitude;
-    modelPosition.x += cos(u_time * u_speed + position.y * u_frequency) * u_amplitude;
-    modelPosition.z += sin(u_time * u_speed + position.z * u_frequency) * u_amplitude;
-
+    vec4 viewPosition = viewMatrix * modelPosition;
     gl_Position = clipSpaceTransform(modelPosition);
+
+    v_normal = normalize(mat3(modelMatrix) * normal);
+    v_viewPosition = -viewPosition.xyz;
+    v_lightDirection = u_lightPosition - modelPosition.xyz;
     v_uv = uv;
 }
