@@ -5,13 +5,12 @@ import { GUI } from 'dat.gui';
 import vertexShaderBasic from './shaders/vertexShaderBasic.glsl';
 import fragmentShaderBasic from './shaders/fragmentShaderBasic.glsl';
 
-
 class App {
   private scene: THREE.Scene;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private controls: OrbitControls;
-  private material: THREE.ShaderMaterial;
+  private material: THREE.RawShaderMaterial;
   private mesh: THREE.Mesh;
   private time: number = 0;
 
@@ -51,14 +50,19 @@ class App {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     // Create material
-    this.material = new THREE.RawShaderMaterial ({
+    this.material = new THREE.RawShaderMaterial({
       vertexShader: vertexShaderBasic,
       fragmentShader: fragmentShaderBasic,
       uniforms: {
         projectionMatrix: { value: this.camera.projectionMatrix },
         viewMatrix: { value: this.camera.matrixWorldInverse },
         modelMatrix: { value: new THREE.Matrix4() },
-        time: { value: this.time }
+        time: { value: this.time },
+        u_lightColor: { value: new THREE.Color(1, 1, 1) },
+        u_materialColor: { value: new THREE.Color(1, 0, 0) },
+        u_specularColor: { value: new THREE.Color(1, 1, 1) },
+        u_shininess: { value: 32.0 },
+        u_lightPosition: { value: new THREE.Vector3(2, 2, 2) }
       },
       glslVersion: THREE.GLSL3
     });
@@ -74,6 +78,13 @@ class App {
     // Add GUI
     const gui = new GUI();
     gui.add(this.material.uniforms.time, 'value', 0, 100).name('Time');
+    gui.addColor(this.material.uniforms.u_lightColor, 'value').name('Light Color');
+    gui.addColor(this.material.uniforms.u_materialColor, 'value').name('Material Color');
+    gui.addColor(this.material.uniforms.u_specularColor, 'value').name('Specular Color');
+    gui.add(this.material.uniforms.u_shininess, 'value', 1, 128).name('Shininess');
+    gui.add(this.material.uniforms.u_lightPosition.value, 'x', -10, 10).name('Light X');
+    gui.add(this.material.uniforms.u_lightPosition.value, 'y', -10, 10).name('Light Y');
+    gui.add(this.material.uniforms.u_lightPosition.value, 'z', -10, 10).name('Light Z');
 
     // Start animation
     this.animate();
@@ -92,7 +103,6 @@ class App {
     this.renderer.render(this.scene, this.camera);
     requestAnimationFrame(this.animate.bind(this));
   }
-
 }
 
 new App();
