@@ -6,14 +6,15 @@ import vertexShaderBasic from '../shaders/vertexShaderBasic.glsl';
 import fragmentShaderBasic from '../shaders/fragmentShaderBasic.glsl';
 
 class MaterialBasic {
-  private scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
-  private renderer: THREE.WebGLRenderer;
-  private material: THREE.RawShaderMaterial;
-  private mesh: THREE.Mesh;
-  private gui: GUI;
+  public scene: THREE.Scene;
+  public camera: THREE.PerspectiveCamera;
+  public renderer: THREE.WebGLRenderer;
+  public material: THREE.RawShaderMaterial;
+  public controls: OrbitControls;
+  public mesh: THREE.Mesh;
+  public gui: GUI;
 
-  private cameraConfig = {
+  public cameraConfig = {
     fov: 75,
     aspect: window.innerWidth / window.innerHeight,
     near: 0.1,
@@ -21,10 +22,11 @@ class MaterialBasic {
   }
 
   // Uniforms
-  private uniforms: any = {
+  public uniforms: any = {
     projectionMatrix: { value: new THREE.Matrix4() },
     viewMatrix: { value: new THREE.Matrix4() },
     modelMatrix: { value: new THREE.Matrix4() },
+    u_materialColor: { value: new THREE.Color(133, 0, 255) },
     u_time: { value: 0.0 },
     u_frequency: { value: 3.5 },
     u_amplitude: { value: 0.1 },
@@ -80,6 +82,7 @@ class MaterialBasic {
     this.gui.add(this.material.uniforms.u_frequency, 'value', 0, 10).name('Frequency');
     this.gui.add(this.material.uniforms.u_amplitude, 'value', 0, 1).name('Amplitude');
     this.gui.add(this.material.uniforms.u_speed, 'value', 0, 10).name('Speed');
+    this.gui.addColor(this.material.uniforms.u_materialColor, 'value').name('Material Color');
 
     // Animate function
     this.animate();

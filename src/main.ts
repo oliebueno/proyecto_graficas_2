@@ -10,7 +10,7 @@ class MainApp {
     constructor() {
       this.currentContainer = document.getElementById('scene-container');
       this.setupUI();
-      this.changeMaterial(0); // Iniciar con Material 1
+      this.changeMaterial(1);
     }
   
     private setupUI() {

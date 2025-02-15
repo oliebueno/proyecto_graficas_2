@@ -1,12 +1,18 @@
 precision mediump float;
 
-uniform vec3 u_color;
+// Uniform
+uniform vec3 u_materialColor;
 uniform float u_time;
 
-in vec2 v_uv;
+// Varying
 out vec4 fragColor;
 
+vec3 normalizeColor(vec3 color) {
+    return color / 255.0;
+}
+
 void main() {
-    vec3 color = vec3(0.52, 0.0, 1.0); 
+    vec3 color = normalizeColor(u_materialColor);
+
     fragColor = vec4(color, 1.0);
 }

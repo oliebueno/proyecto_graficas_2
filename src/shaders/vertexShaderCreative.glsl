@@ -5,7 +5,8 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 uniform float u_time;
-uniform float u_amplitude;
+uniform float u_amplitude; // Amplitude for vertex displacement
+uniform float u_audioAmplitude; // Audio amplitude
 
 // Attributes
 in vec3 position;
@@ -14,20 +15,14 @@ in vec2 uv;
 
 // Varyings
 out vec3 v_normal;
-out vec3 v_viewPosition;
 out vec2 v_uv;
 
 void main() {
-    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-
-    // baloon effect
-    float inflate = sin(u_time + position.x * u_amplitude) * 0.1;
-    modelPosition.xyz += normal * inflate;
-
-    vec4 viewPosition = viewMatrix * modelPosition;
-    gl_Position = projectionMatrix * viewPosition;
-
-    v_normal = normalize(mat3(modelMatrix) * normal);
-    v_viewPosition = -viewPosition.xyz;
+    vec3 displacedPosition = position;
+    displacedPosition.y += sin(position.x * 10.0 + u_time) * u_amplitude * u_audioAmplitude;
+    
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(displacedPosition, 1.0);
+    v_normal = normal;
     v_uv = uv;
 }
+
