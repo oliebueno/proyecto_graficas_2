@@ -57,7 +57,6 @@ class MaterialBasic {
     }
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(this.renderer.domElement);
-    document.getElementById('scene-container').appendChild(this.renderer.domElement);
 
     // Create controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
