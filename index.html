@@ -3,18 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gruop materials</title>
+    <title>Materials group</title>
     <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div id="ui">
-        <h1>Gruop materials</h1>
-        <button class="button" id="material1">Material 1</button>
-        <button class="button" id="material2">Material 2</button>
-        <button class="button" id="material3">Material 3</button>
+        <h1>Materials group</h1>
+        <button class="button" id="material1">Deformed material</button>
+        <button class="button" id="material2">BlinnPhong material</button>
+        <button class="button" id="material3">Music material</button>
+        
+        <div id="audio-controls">
+            <button class="button_music" id="play"><i class="fas fa-play"></i></button>
+            <button class="button_music" id="pause"><i class="fas fa-pause"></i></button>
+            <button class="button_music" id="song1">Song 1</button>
+            <button class="button_music" id="song2">Song 2</button>
+            <button class="button_music" id="song3">mysterious song</button>
+        </div>
     </div>
     <div id="scene-container"></div>
     <script type="module" src="/src/main.ts"></script>
 </body>
 </html>
-
