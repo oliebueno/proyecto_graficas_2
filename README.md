@@ -37,7 +37,7 @@ This project was developed using the following tech stack:
 
 ## Link to demo video
 
--[Demo video](https://www.youtube.com/watch?v=TH8H2EnUlfQ)
+- [Demo video](https://www.youtube.com/watch?v=TH8H2EnUlfQ)
 
 ## How to run this project
 
