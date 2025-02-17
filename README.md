@@ -19,7 +19,7 @@ dynamic and engaging visual effects.
 
 ### Blinn-Phong Material:
 
--Realistic Lighting: Uses the Blinn-Phong lighting model to create specular and diffuse reflections
+- Realistic Lighting: Uses the Blinn-Phong lighting model to create specular and diffuse reflections
 
 ### Dynamic and Music-Synchronized Visualization:
 
