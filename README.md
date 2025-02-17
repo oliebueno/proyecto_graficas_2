@@ -1,4 +1,4 @@
-# Computer graphics 2 proyect
+# Computer graphics 2 proyect: Interactive Material Visualization with Three.js
 
 ## Autors
 
